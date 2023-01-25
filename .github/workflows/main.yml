@@ -23,22 +23,22 @@ jobs:
       matrix:
         device:
           # sm8150
-          - mh2lm
-          - betalm
-          - nabu
-          - vayu
-          - cepheus
-          - hotdog
-          - guacamole
+          # - mh2lm
+          #  - betalm
+          #  - nabu
+          #  - vayu
+          #  - cepheus
+          #  - hotdog
+          #  - guacamole
           # sdm845
-          - polaris
-          - perseus
+          #  - polaris
+          #  - perseus
           - equuleus
           # sm7325
-          - mona
-          - lisa
+          #  - mona
+          # - lisa
           # msm8998
-          - cheeseburger
+          #  - cheeseburger
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -61,3 +61,15 @@ jobs:
           name: ${{ matrix.device }}
           # A file, directory or wildcard pattern that describes what to upload
           path: ./*.img
+
+      - name: 9. 创建GitHub Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{steps.version.outputs.value}}
+          release_name: v${{steps.version.outputs.value}}
+          body: ${{steps.description.outputs.content}}
+          draft: false
+          prerelease: false
